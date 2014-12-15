@@ -31,6 +31,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="libpxcclr.cs, Version=1.0.0.0, Culture=neutral, PublicKeyToken=ca106b2214526f83, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
@@ -49,15 +52,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="mainForm.cs">
+    <Compile Include="Forms\ImageForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="mainForm.Designer.cs">
+    <Compile Include="Forms\ImageForm.Designer.cs">
+      <DependentUpon>ImageForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\mainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\mainForm.Designer.cs">
       <DependentUpon>mainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="mainForm.resx">
+    <EmbeddedResource Include="Forms\ImageForm.resx">
+      <DependentUpon>ImageForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\mainForm.resx">
       <DependentUpon>mainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
