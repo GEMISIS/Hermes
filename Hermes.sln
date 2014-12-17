@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pinch-Me", "Pinch-Me\Pinch-Me.csproj", "{41C4A863-AAEE-4B50-A72F-F108D572A5BD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hermes", "Hermes\Hermes.csproj", "{56E7EC87-5DCA-46A8-B144-758E53106512}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{41C4A863-AAEE-4B50-A72F-F108D572A5BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{41C4A863-AAEE-4B50-A72F-F108D572A5BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{41C4A863-AAEE-4B50-A72F-F108D572A5BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{41C4A863-AAEE-4B50-A72F-F108D572A5BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56E7EC87-5DCA-46A8-B144-758E53106512}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56E7EC87-5DCA-46A8-B144-758E53106512}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56E7EC87-5DCA-46A8-B144-758E53106512}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56E7EC87-5DCA-46A8-B144-758E53106512}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
