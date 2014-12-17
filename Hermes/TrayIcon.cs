@@ -19,6 +19,7 @@ namespace Hermes
 
         HandForm handForm;
         ImageForm colorImageForm, depthImageForm, irImageForm;
+        MenuItem canTrack = null;
 
         public TrayIcon()
         {
@@ -28,15 +29,32 @@ namespace Hermes
             this.icon.Icon = Hermes.Properties.Resources.test;
 
             this.icon.ContextMenu = new ContextMenu();
-            this.icon.ContextMenu.MenuItems.Add(new MenuItem("Color Stream", new EventHandler(showColorStream)));
-            this.icon.ContextMenu.MenuItems.Add(new MenuItem("Depth Stream", new EventHandler(showDepthStream)));
-            this.icon.ContextMenu.MenuItems.Add(new MenuItem("Infrared Stream", new EventHandler(showIRStream)));
-            this.icon.ContextMenu.MenuItems.Add(new MenuItem("Hand Stream", new EventHandler(showHandStream)));
+
+            canTrack = new MenuItem("Mouse Controls");
+            canTrack.Checked = false;
+            canTrack.Click += canTrack_Click;
+
+            this.icon.ContextMenu.MenuItems.Add("Debug", new MenuItem[]
+                {
+                    new MenuItem("Color Stream", new EventHandler(showColorStream)),
+                    new MenuItem("Depth Stream", new EventHandler(showDepthStream)),
+                    new MenuItem("Infrared Stream", new EventHandler(showIRStream)),
+                    new MenuItem("Hand Stream", new EventHandler(showHandStream)),
+                });
+            this.icon.ContextMenu.MenuItems.Add(canTrack);
             this.icon.ContextMenu.MenuItems.Add(new MenuItem("Exit Hermes", new EventHandler(exit)));
 
             this.icon.Visible = true;
 
+            this.icon.BalloonTipText = "Hermes has started!";
+            this.icon.ShowBalloonTip(10);
+
             startCamera();
+        }
+
+        void canTrack_Click(object sender, EventArgs e)
+        {
+            canTrack.Checked = !canTrack.Checked;
         }
 
         private void startCamera()
@@ -145,7 +163,7 @@ namespace Hermes
                     }
 
                 }
-                if (jointData != null)
+                if (jointData != null && canTrack.Checked)
                 {
                     Cursor.Position = new System.Drawing.Point(
                         (int)((640.0f - jointData.positionImage.x) * Screen.PrimaryScreen.Bounds.Width / 640.0f),
