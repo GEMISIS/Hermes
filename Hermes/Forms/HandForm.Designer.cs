@@ -1,6 +1,6 @@
-﻿namespace Pinch_Me
+﻿namespace Hermes
 {
-    partial class mainForm
+    partial class HandForm
     {
         /// <summary>
         /// Required designer variable.
@@ -29,11 +29,6 @@
         private void InitializeComponent()
         {
             this.leftHand = new System.Windows.Forms.PictureBox();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.colorStreamToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.depthStreamToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.iRStreamToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.handCountLabel = new System.Windows.Forms.Label();
             this.rightHand = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -43,7 +38,6 @@
             this.leftOrien = new System.Windows.Forms.Label();
             this.rightOrien = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.leftHand)).BeginInit();
-            this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.rightHand)).BeginInit();
             this.SuspendLayout();
             // 
@@ -56,47 +50,6 @@
             this.leftHand.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.leftHand.TabIndex = 0;
             this.leftHand.TabStop = false;
-            // 
-            // menuStrip1
-            // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.viewToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(624, 24);
-            this.menuStrip1.TabIndex = 1;
-            this.menuStrip1.Text = "menuStrip1";
-            // 
-            // viewToolStripMenuItem
-            // 
-            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.colorStreamToolStripMenuItem,
-            this.depthStreamToolStripMenuItem,
-            this.iRStreamToolStripMenuItem});
-            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.viewToolStripMenuItem.Text = "View";
-            // 
-            // colorStreamToolStripMenuItem
-            // 
-            this.colorStreamToolStripMenuItem.Name = "colorStreamToolStripMenuItem";
-            this.colorStreamToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.colorStreamToolStripMenuItem.Text = "Color Stream";
-            this.colorStreamToolStripMenuItem.Click += new System.EventHandler(this.colorStreamToolStripMenuItem_Click);
-            // 
-            // depthStreamToolStripMenuItem
-            // 
-            this.depthStreamToolStripMenuItem.Name = "depthStreamToolStripMenuItem";
-            this.depthStreamToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.depthStreamToolStripMenuItem.Text = "Depth Stream";
-            this.depthStreamToolStripMenuItem.Click += new System.EventHandler(this.depthStreamToolStripMenuItem_Click);
-            // 
-            // iRStreamToolStripMenuItem
-            // 
-            this.iRStreamToolStripMenuItem.Name = "iRStreamToolStripMenuItem";
-            this.iRStreamToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.iRStreamToolStripMenuItem.Text = "IR Stream";
-            this.iRStreamToolStripMenuItem.Click += new System.EventHandler(this.iRStreamToolStripMenuItem_Click);
             // 
             // handCountLabel
             // 
@@ -194,17 +147,11 @@
             this.Controls.Add(this.rightHand);
             this.Controls.Add(this.handCountLabel);
             this.Controls.Add(this.leftHand);
-            this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.Name = "mainForm";
             this.Text = "Pinch Me";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.mainForm_FormClosing);
-            this.Load += new System.EventHandler(this.mainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.leftHand)).EndInit();
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.rightHand)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -214,11 +161,6 @@
         #endregion
 
         private System.Windows.Forms.PictureBox leftHand;
-        private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem colorStreamToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem depthStreamToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem iRStreamToolStripMenuItem;
         private System.Windows.Forms.Label handCountLabel;
         private System.Windows.Forms.PictureBox rightHand;
         private System.Windows.Forms.Label label1;

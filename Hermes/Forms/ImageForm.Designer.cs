@@ -1,4 +1,4 @@
-﻿namespace Pinch_Me
+﻿namespace Hermes
 {
     partial class ImageForm
     {

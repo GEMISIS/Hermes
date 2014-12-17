@@ -1,8 +1,5 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,22 +7,37 @@ using System.Windows.Forms;
 using System.Threading;
 using libpxcclr.cs;
 
-namespace Pinch_Me
+namespace Hermes
 {
-    public partial class mainForm : Form
+    class TrayIcon : ApplicationContext
     {
+        NotifyIcon icon;
+
         PXCMSession session;
         PXCMSenseManager manager;
         Thread thread;
 
         ImageForm colorImageForm, depthImageForm, irImageForm;
 
-        public mainForm()
+        public TrayIcon()
         {
-            InitializeComponent();
+            this.icon = new NotifyIcon();
+
+            this.icon.Text = "Hermes";
+            this.icon.Icon = Hermes.Properties.Resources.test;
+
+            this.icon.ContextMenu = new ContextMenu();
+            this.icon.ContextMenu.MenuItems.Add(new MenuItem("Color Stream", new EventHandler(showColorStream)));
+            this.icon.ContextMenu.MenuItems.Add(new MenuItem("Depth Stream", new EventHandler(showDepthStream)));
+            this.icon.ContextMenu.MenuItems.Add(new MenuItem("Infrared Stream", new EventHandler(showIRStream)));
+            this.icon.ContextMenu.MenuItems.Add(new MenuItem("Exit Hermes", new EventHandler(exit)));
+
+            this.icon.Visible = true;
+
+            startCamera();
         }
 
-        private void mainForm_Load(object sender, EventArgs e)
+        private void startCamera()
         {
             session = PXCMSession.CreateInstance();
             manager = session.CreateSenseManager();
@@ -47,7 +59,7 @@ namespace Pinch_Me
 
         void updateThread()
         {
-            while(true)
+            while (true)
             {
                 if (manager.AcquireFrame(true) < pxcmStatus.PXCM_STATUS_NO_ERROR)
                 {
@@ -67,7 +79,7 @@ namespace Pinch_Me
 
         pxcmStatus newHandFrame(PXCMHandModule hand)
         {
-            if(hand != null)
+            if (hand != null)
             {
             }
             return pxcmStatus.PXCM_STATUS_NO_ERROR;
@@ -108,9 +120,10 @@ namespace Pinch_Me
             }
             return pxcmStatus.PXCM_STATUS_NO_ERROR;
         }
-        
-        private void mainForm_FormClosing(object sender, FormClosingEventArgs e)
+
+        protected override void OnMainFormClosed(object sender, EventArgs e)
         {
+            base.OnMainFormClosed(sender, e);
             thread.Abort();
             thread.Join();
             manager.Close();
@@ -118,16 +131,15 @@ namespace Pinch_Me
             session.Dispose();
         }
 
-        private void colorStreamToolStripMenuItem_Click(object sender, EventArgs e)
+        private void showColorStream(object sender, EventArgs eventArgs)
         {
-            if(colorImageForm == null || colorImageForm.IsDisposed)
+            if (colorImageForm == null || colorImageForm.IsDisposed)
             {
                 colorImageForm = new ImageForm();
                 colorImageForm.Show();
             }
         }
-
-        private void depthStreamToolStripMenuItem_Click(object sender, EventArgs e)
+        private void showDepthStream(object sender, EventArgs eventArgs)
         {
             if (depthImageForm == null || depthImageForm.IsDisposed)
             {
@@ -135,14 +147,22 @@ namespace Pinch_Me
                 depthImageForm.Show();
             }
         }
-
-        private void iRStreamToolStripMenuItem_Click(object sender, EventArgs e)
+        private void showIRStream(object sender, EventArgs eventArgs)
         {
             if (irImageForm == null || irImageForm.IsDisposed)
             {
                 irImageForm = new ImageForm();
                 irImageForm.Show();
             }
+        }
+        private void exit(object sender, EventArgs eventArgs)
+        {
+            thread.Abort();
+            thread.Join();
+            manager.Close();
+            manager.Dispose();
+            session.Dispose();
+            Application.Exit();
         }
     }
 }

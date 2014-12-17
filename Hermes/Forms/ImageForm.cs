@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Pinch_Me
+namespace Hermes
 {
     public partial class ImageForm : Form
     {
