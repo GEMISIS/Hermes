@@ -17,6 +17,7 @@ namespace Hermes
         PXCMSenseManager manager;
         Thread thread;
 
+        HandForm handForm;
         ImageForm colorImageForm, depthImageForm, irImageForm;
 
         public TrayIcon()
@@ -30,6 +31,7 @@ namespace Hermes
             this.icon.ContextMenu.MenuItems.Add(new MenuItem("Color Stream", new EventHandler(showColorStream)));
             this.icon.ContextMenu.MenuItems.Add(new MenuItem("Depth Stream", new EventHandler(showDepthStream)));
             this.icon.ContextMenu.MenuItems.Add(new MenuItem("Infrared Stream", new EventHandler(showIRStream)));
+            this.icon.ContextMenu.MenuItems.Add(new MenuItem("Hand Stream", new EventHandler(showHandStream)));
             this.icon.ContextMenu.MenuItems.Add(new MenuItem("Exit Hermes", new EventHandler(exit)));
 
             this.icon.Visible = true;
@@ -50,6 +52,13 @@ namespace Hermes
             manager.EnableStream(PXCMCapture.StreamType.STREAM_TYPE_DEPTH, 640, 480, 60);
             manager.EnableStream(PXCMCapture.StreamType.STREAM_TYPE_IR, 640, 480, 60);
             manager.EnableHand();
+
+            PXCMHandConfiguration config = manager.QueryHand().CreateActiveConfiguration();
+            config.EnableAllAlerts();
+            config.EnableSegmentationImage(true);
+            config.EnableTrackedJoints(true);
+            config.ApplyChanges();
+            config.Dispose();
 
             manager.Init();
 
@@ -79,8 +88,42 @@ namespace Hermes
 
         pxcmStatus newHandFrame(PXCMHandModule hand)
         {
-            if (hand != null)
+            if (hand != null && handForm != null && !handForm.IsDisposed)
             {
+                PXCMHandData handData = hand.CreateOutput();
+                handData.Update();
+
+                this.handForm.HandCount = handData.QueryNumberOfHands();
+
+                PXCMHandData.IHand iHandData;
+                PXCMImage image;
+
+                handData.QueryHandData(PXCMHandData.AccessOrderType.ACCESS_ORDER_LEFT_HANDS, 0, out iHandData);
+                if (iHandData != null)
+                {
+                    iHandData.QuerySegmentationImage(out image);
+                    if (image != null)
+                    {
+                        PXCMImage.ImageData data = new PXCMImage.ImageData();
+                        image.AcquireAccess(PXCMImage.Access.ACCESS_READ, PXCMImage.PixelFormat.PIXEL_FORMAT_RGB32, out data);
+                        handForm.LeftHand = data.ToBitmap(0, image.info.width, image.info.height);
+                        image.ReleaseAccess(data);
+                    }
+                }
+                handData.QueryHandData(PXCMHandData.AccessOrderType.ACCESS_ORDER_RIGHT_HANDS, 0, out iHandData);
+                if (iHandData != null)
+                {
+                    iHandData.QuerySegmentationImage(out image);
+                    if (image != null)
+                    {
+                        PXCMImage.ImageData data = new PXCMImage.ImageData();
+                        image.AcquireAccess(PXCMImage.Access.ACCESS_READ, PXCMImage.PixelFormat.PIXEL_FORMAT_RGB32, out data);
+                        handForm.RightHand = data.ToBitmap(0, image.info.width, image.info.height);
+                        image.ReleaseAccess(data);
+                    }
+                }
+                
+                handData.Dispose();
             }
             return pxcmStatus.PXCM_STATUS_NO_ERROR;
         }
@@ -153,6 +196,14 @@ namespace Hermes
             {
                 irImageForm = new ImageForm();
                 irImageForm.Show();
+            }
+        }
+        private void showHandStream(object sender, EventArgs eventArgs)
+        {
+            if (handForm == null || handForm.IsDisposed)
+            {
+                handForm = new HandForm();
+                handForm.Show();
             }
         }
         private void exit(object sender, EventArgs eventArgs)

@@ -54,11 +54,11 @@
     <Compile Include="Forms\ImageForm.Designer.cs">
       <DependentUpon>ImageForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\mainForm.cs">
+    <Compile Include="Forms\HandForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\mainForm.Designer.cs">
-      <DependentUpon>mainForm.cs</DependentUpon>
+    <Compile Include="Forms\HandForm.Designer.cs">
+      <DependentUpon>HandForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -82,8 +82,8 @@
     <EmbeddedResource Include="Forms\ImageForm.resx">
       <DependentUpon>ImageForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\mainForm.resx">
-      <DependentUpon>mainForm.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\HandForm.resx">
+      <DependentUpon>HandForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
