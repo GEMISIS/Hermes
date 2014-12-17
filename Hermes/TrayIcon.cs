@@ -54,9 +54,13 @@ namespace Hermes
             manager.EnableHand();
 
             PXCMHandConfiguration config = manager.QueryHand().CreateActiveConfiguration();
+
             config.EnableAllAlerts();
             config.EnableSegmentationImage(true);
             config.EnableTrackedJoints(true);
+            config.LoadGesturePack("navigation");
+            config.EnableAllGestures(true);
+
             config.ApplyChanges();
             config.Dispose();
 
@@ -88,39 +92,70 @@ namespace Hermes
 
         pxcmStatus newHandFrame(PXCMHandModule hand)
         {
-            if (hand != null && handForm != null && !handForm.IsDisposed)
+            if (hand != null)
             {
                 PXCMHandData handData = hand.CreateOutput();
                 handData.Update();
 
-                this.handForm.HandCount = handData.QueryNumberOfHands();
+                PXCMHandData.IHand iHandDataLeft = null, iHandDataRight = null;
+                PXCMHandData.JointData jointData = null;
+                PXCMImage image = null;
 
-                PXCMHandData.IHand iHandData;
-                PXCMImage image;
-
-                handData.QueryHandData(PXCMHandData.AccessOrderType.ACCESS_ORDER_LEFT_HANDS, 0, out iHandData);
-                if (iHandData != null)
+                handData.QueryHandData(PXCMHandData.AccessOrderType.ACCESS_ORDER_LEFT_HANDS, 0, out iHandDataLeft);
+                handData.QueryHandData(PXCMHandData.AccessOrderType.ACCESS_ORDER_RIGHT_HANDS, 0, out iHandDataRight);
+                if (handForm != null && !handForm.IsDisposed)
                 {
-                    iHandData.QuerySegmentationImage(out image);
-                    if (image != null)
+                    this.handForm.HandCount = handData.QueryNumberOfHands();
+                    if (iHandDataLeft != null)
                     {
-                        PXCMImage.ImageData data = new PXCMImage.ImageData();
-                        image.AcquireAccess(PXCMImage.Access.ACCESS_READ, PXCMImage.PixelFormat.PIXEL_FORMAT_RGB32, out data);
-                        handForm.LeftHand = data.ToBitmap(0, image.info.width, image.info.height);
-                        image.ReleaseAccess(data);
+                        iHandDataLeft.QuerySegmentationImage(out image);
+                        if (image != null)
+                        {
+                            PXCMImage.ImageData data = new PXCMImage.ImageData();
+                            image.AcquireAccess(PXCMImage.Access.ACCESS_READ, PXCMImage.PixelFormat.PIXEL_FORMAT_RGB32, out data);
+                            handForm.LeftHand = data.ToBitmap(0, image.info.width, image.info.height);
+                            image.ReleaseAccess(data);
+                        }
+                    }
+                    if (iHandDataRight != null)
+                    {
+                        iHandDataRight.QuerySegmentationImage(out image);
+                        if (image != null)
+                        {
+                            PXCMImage.ImageData data = new PXCMImage.ImageData();
+                            image.AcquireAccess(PXCMImage.Access.ACCESS_READ, PXCMImage.PixelFormat.PIXEL_FORMAT_RGB32, out data);
+                            handForm.RightHand = data.ToBitmap(0, image.info.width, image.info.height);
+                            image.ReleaseAccess(data);
+                        }
                     }
                 }
-                handData.QueryHandData(PXCMHandData.AccessOrderType.ACCESS_ORDER_RIGHT_HANDS, 0, out iHandData);
-                if (iHandData != null)
+                if (iHandDataLeft != null)
                 {
-                    iHandData.QuerySegmentationImage(out image);
-                    if (image != null)
+                    if (jointData == null)
                     {
-                        PXCMImage.ImageData data = new PXCMImage.ImageData();
-                        image.AcquireAccess(PXCMImage.Access.ACCESS_READ, PXCMImage.PixelFormat.PIXEL_FORMAT_RGB32, out data);
-                        handForm.RightHand = data.ToBitmap(0, image.info.width, image.info.height);
-                        image.ReleaseAccess(data);
+                        iHandDataLeft.QueryTrackedJoint(PXCMHandData.JointType.JOINT_INDEX_TIP, out jointData);
                     }
+
+                }
+                if (iHandDataRight != null)
+                {
+                    if (jointData == null)
+                    {
+                        iHandDataRight.QueryTrackedJoint(PXCMHandData.JointType.JOINT_INDEX_TIP, out jointData);
+                    }
+
+                }
+                if (jointData != null)
+                {
+                    Cursor.Position = new System.Drawing.Point(
+                        (int)((640.0f - jointData.positionImage.x) * Screen.PrimaryScreen.Bounds.Width / 640.0f),
+                        (int)(jointData.positionImage.y * Screen.PrimaryScreen.Bounds.Height / 480.0f));
+                    PXCMHandData.GestureData gestureData = null;
+                    if(handData.IsGestureFired("two_fingers_pinch_open", out gestureData))
+                    {
+                        Program.DoMouseClick();
+                    }
+                    Console.WriteLine("Z Position: " + jointData.positionWorld.z);
                 }
                 
                 handData.Dispose();
