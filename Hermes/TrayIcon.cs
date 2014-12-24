@@ -34,7 +34,7 @@ namespace Hermes
             canTrack.Checked = false;
             canTrack.Click += canTrack_Click;
 
-            this.icon.ContextMenu.MenuItems.Add("Debug", new MenuItem[]
+            this.icon.ContextMenu.MenuItems.Add("Image Stream", new MenuItem[]
                 {
                     new MenuItem("Color Stream", new EventHandler(showColorStream)),
                     new MenuItem("Depth Stream", new EventHandler(showDepthStream)),
